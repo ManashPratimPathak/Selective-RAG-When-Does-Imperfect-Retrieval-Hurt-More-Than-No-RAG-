@@ -1,0 +1,2 @@
+{"condition": "no_rag", "question": "What is the capital of France?", "answer": "Paris."}
+{"condition": "rag", "question": "What is the capital of France?", "answer": "Paris."}
