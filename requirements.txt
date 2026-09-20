@@ -1,0 +1,17 @@
+torch
+transformers
+accelerate
+bitsandbytes
+datasets
+pandas
+numpy
+scipy
+statsmodels
+scikit-learn
+rank_bm25
+requests
+beautifulsoup4
+tqdm
+matplotlib
+seaborn
+pyyaml

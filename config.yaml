@@ -1,0 +1,15 @@
+seed: 42
+model: Qwen/Qwen2.5-1.5B-Instruct
+dev_size: 40
+test_size: 200
+head_dev: 20
+tail_dev: 20
+head_test: 100
+tail_test: 100
+chunk_words: 100
+chunk_overlap: 20
+retrieval_k: 3
+bm25_k1: 1.5
+bm25_b: 0.75
+max_new_tokens: 16
+do_sample: false
