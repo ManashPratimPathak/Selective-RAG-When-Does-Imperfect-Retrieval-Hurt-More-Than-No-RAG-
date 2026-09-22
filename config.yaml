@@ -13,3 +13,9 @@ bm25_k1: 1.5
 bm25_b: 0.75
 max_new_tokens: 16
 do_sample: false
+wikipedia_request_delay_seconds: 1.0
+wikipedia_max_retries: 2
+wikipedia_timeout_seconds: 3
+distractor_target: 500
+distractor_expand_target: 1000
+distractor_dev_recall3_threshold: 0.95

@@ -33,6 +33,16 @@
     "tail_test": 100,
     "test_size": 200
   },
+  "corpus_frozen_at": "2026-09-22T10:17:07.184323+00:00",
+  "corpus_replacement_count": 1,
+  "corpus_replacements": [
+    {
+      "exclusion_reason": "missing_or_failed_wikipedia_page",
+      "question_id": 5966775,
+      "replacement_id": 4783605,
+      "stage": "wikipedia_corpus"
+    }
+  ],
   "counts": {
     "dev/head": 20,
     "dev/tail": 20,
@@ -99,7 +109,7 @@
   },
   "row_count": 240,
   "sample_path": "C:\\Users\\conta\\Desktop\\Manash\\dev_works\\ml\\projects\\NLP for LLMs Project\\data\\frozen\\popqa_sample.jsonl",
-  "sha256": "e747200177f6ab2b09eefe96c8dc672bfc8606194b37c6c89ddc463c3190c285",
+  "sha256": "a9cf03e47a24d5150c1b01574d95fce7c9296c6766517b36375c7290c642d1ca",
   "source": "akariasai/PopQA@latest",
   "split": "test"
 }

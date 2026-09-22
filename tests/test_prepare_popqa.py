@@ -146,7 +146,7 @@ def test_frozen_frame_has_only_protocol_fields_and_sampling_seed():
     assert review.iloc[0]["reviewer_status"] == "pending_manual_review"
 
 
-def test_review_frozen_frame_resolves_all_source-backed_checks():
+def test_review_frozen_frame_resolves_all_source_backed_checks():
     frozen = pd.DataFrame(
         {
             "question_id": [7], "split": ["test"], "popularity_group": ["head"],
