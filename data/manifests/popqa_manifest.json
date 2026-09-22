@@ -1,0 +1,105 @@
+{
+  "backup_pool_count": {
+    "head": 20,
+    "tail": 20
+  },
+  "backup_pool_path": "C:\\Users\\conta\\Desktop\\Manash\\dev_works\\ml\\projects\\NLP for LLMs Project\\data\\frozen\\popqa_backup_pool.jsonl",
+  "columns": [
+    "question_id",
+    "split",
+    "popularity_group",
+    "subject",
+    "relation",
+    "question",
+    "popularity",
+    "wikipedia_title",
+    "accepted_answers",
+    "sampling_seed"
+  ],
+  "config": {
+    "bm25_b": 0.75,
+    "bm25_k1": 1.5,
+    "chunk_overlap": 20,
+    "chunk_words": 100,
+    "dev_size": 40,
+    "do_sample": false,
+    "head_dev": 20,
+    "head_test": 100,
+    "max_new_tokens": 16,
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "retrieval_k": 3,
+    "seed": 42,
+    "tail_dev": 20,
+    "tail_test": 100,
+    "test_size": 200
+  },
+  "counts": {
+    "dev/head": 20,
+    "dev/tail": 20,
+    "test/head": 100,
+    "test/tail": 100
+  },
+  "exclusion_count": 1541,
+  "exclusion_log_path": "C:\\Users\\conta\\Desktop\\Manash\\dev_works\\ml\\projects\\NLP for LLMs Project\\data\\manifests\\popqa_exclusion_log.jsonl",
+  "freeze_schema": [
+    "question_id",
+    "split",
+    "popularity_group",
+    "subject",
+    "relation",
+    "question",
+    "popularity",
+    "wikipedia_title",
+    "accepted_answers",
+    "sampling_seed"
+  ],
+  "manual_review_count": 240,
+  "manual_review_path": "C:\\Users\\conta\\Desktop\\Manash\\dev_works\\ml\\projects\\NLP for LLMs Project\\data\\manifests\\popqa_manual_review.jsonl",
+  "manual_review_status": "complete",
+  "popularity_thresholds": {
+    "q25": 227.0,
+    "q75": 5395.5
+  },
+  "pre_review_sha256": "e747200177f6ab2b09eefe96c8dc672bfc8606194b37c6c89ddc463c3190c285",
+  "relation_distribution": {
+    "head": {
+      "author": 9,
+      "capital": 4,
+      "capital of": 1,
+      "composer": 8,
+      "country": 5,
+      "director": 25,
+      "father": 6,
+      "genre": 23,
+      "mother": 1,
+      "occupation": 4,
+      "place of birth": 2,
+      "producer": 10,
+      "religion": 5,
+      "screenwriter": 13,
+      "sport": 4
+    },
+    "tail": {
+      "author": 9,
+      "capital": 4,
+      "capital of": 1,
+      "composer": 8,
+      "country": 5,
+      "director": 25,
+      "father": 6,
+      "genre": 23,
+      "mother": 1,
+      "occupation": 4,
+      "place of birth": 2,
+      "producer": 10,
+      "religion": 5,
+      "screenwriter": 13,
+      "sport": 4
+    }
+  },
+  "row_count": 240,
+  "sample_path": "C:\\Users\\conta\\Desktop\\Manash\\dev_works\\ml\\projects\\NLP for LLMs Project\\data\\frozen\\popqa_sample.jsonl",
+  "sha256": "e747200177f6ab2b09eefe96c8dc672bfc8606194b37c6c89ddc463c3190c285",
+  "source": "akariasai/PopQA@latest",
+  "split": "test"
+}
