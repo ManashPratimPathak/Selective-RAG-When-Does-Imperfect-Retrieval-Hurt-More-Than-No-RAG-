@@ -1,8 +1,6 @@
-"""Build the chunked retrieval corpus from frozen evidence."""
+"""Build the chunked retrieval corpus from the frozen cleaned artifact."""
 
-
-def main() -> None:
-    raise NotImplementedError
+from chunk_corpus import main
 
 
 if __name__ == "__main__":

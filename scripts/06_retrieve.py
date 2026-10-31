@@ -1,8 +1,6 @@
 """Retrieve top-k corpus chunks for each question."""
 
-
-def main() -> None:
-    raise NotImplementedError
+from retrieve import main
 
 
 if __name__ == "__main__":

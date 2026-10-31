@@ -14,8 +14,11 @@ import yaml
 from fetch_wikipedia_corpus import (
     DEFAULT_USER_AGENT,
     choose_backup,
+    cached_page_matches_request,
     fetch_page,
     load_jsonl,
+    page_has_substantive_content,
+    unresolved_current_failures,
     write_jsonl,
 )
 
@@ -47,6 +50,11 @@ def main() -> None:
         if (index + 1) % 10 == 1:
             print(f"Fetching {index + 1}/{len(sample)}: {title}", flush=True)
         page = page_cache.get(title)
+        # Existing caches may have been created before the fetcher used
+        # redirect=no. Refetch those entries so the requested question title
+        # and frozen article remain aligned.
+        if page is not None and not cached_page_matches_request(page, title):
+            page = None
         outcome = None
         if page is None and title not in title_failures:
             for attempt in range(max_retries + 1):
@@ -60,6 +68,9 @@ def main() -> None:
                     except ValueError:
                         wait_seconds = delay * (attempt + 1)
                     time.sleep(max(delay, wait_seconds))
+            if page is not None and not page_has_substantive_content(page):
+                outcome = {**outcome, "status": "unusable_page", "error": "redirect_or_insufficient_content"}
+                page = None
             if page is not None:
                 page_cache[title] = page
             else:
@@ -70,6 +81,7 @@ def main() -> None:
             outcome = title_failures[title]
             fetch_log.append({**outcome, "question_id": row["question_id"], "cached_failure": True})
         if page is not None:
+            pages = [existing for existing in pages if existing.get("requested_title") != title]
             pages.append(page)
             if (index + 1) % 10 == 0:
                 print(f"Processed {index + 1}/{len(sample)} questions", flush=True)
@@ -91,6 +103,13 @@ def main() -> None:
                 break
             attempted_backup_ids.add(replacement["question_id"])
             replacement_page, replacement_outcome = fetch_page(session, replacement["wikipedia_title"])
+            if replacement_page is not None and not page_has_substantive_content(replacement_page):
+                replacement_outcome = {
+                    **replacement_outcome,
+                    "status": "unusable_page",
+                    "error": "replacement_redirect_or_insufficient_content",
+                }
+                replacement_page = None
             fetch_log.append({**replacement_outcome, "question_id": replacement["question_id"], "replacement_for": row["question_id"]})
             time.sleep(delay)
         if replacement_page is None or replacement is None:
@@ -116,6 +135,7 @@ def main() -> None:
             }
         )
         pages.append(replacement_page)
+        pages = [existing for existing in pages if existing.get("requested_title") != title or existing is replacement_page]
         write_jsonl(corpus_path, list({item["page_title"]: item for item in pages}.values()))
         write_jsonl(fetch_log_path, fetch_log)
         if (index + 1) % 10 == 0:
@@ -124,6 +144,12 @@ def main() -> None:
             write_jsonl(corpus_path, list({item["page_title"]: item for item in pages}.values()))
             write_jsonl(fetch_log_path, fetch_log)
 
+    active_titles = set(sample["wikipedia_title"])
+    pages = [
+        page
+        for page in pages
+        if page.get("page_title") in active_titles or page.get("requested_title") in active_titles
+    ]
     write_jsonl(corpus_path, list({page["page_title"]: page for page in pages}.values()))
     write_jsonl(fetch_log_path, fetch_log)
     historical_replacements = []
@@ -135,12 +161,16 @@ def main() -> None:
     resolved_question_ids = {
         entry["question_id"] for entry in replacement_log + historical_replacements
     }
-    unresolved = [
-        entry
-        for entry in fetch_log
-        if entry.get("status") == "unresolved_corpus_failure"
-        and entry.get("question_id") not in resolved_question_ids
-    ]
+    unresolved = unresolved_current_failures(
+        [
+            entry
+            for entry in fetch_log
+            if entry.get("status") == "unresolved_corpus_failure"
+            and entry.get("question_id") not in resolved_question_ids
+            and entry.get("requested_title") in active_titles
+        ],
+        pages,
+    )
     if unresolved:
         raise RuntimeError(f"{len(unresolved)} corpus pages remain unresolved; see wikipedia_fetch_log.jsonl")
     if replacement_log:

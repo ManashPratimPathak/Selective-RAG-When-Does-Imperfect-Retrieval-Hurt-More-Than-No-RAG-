@@ -1,5 +1,7 @@
 seed: 42
 model: Qwen/Qwen2.5-1.5B-Instruct
+model_revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
+tokenizer_revision: 989aa7980e4cf806f80c7fef2b1adb7bc71aa306
 dev_size: 40
 test_size: 200
 head_dev: 20
@@ -8,11 +10,21 @@ head_test: 100
 tail_test: 100
 chunk_words: 100
 chunk_overlap: 20
-retrieval_k: 3
+chunk_min_words: 25
+retrieval_k: 5
 bm25_k1: 1.5
 bm25_b: 0.75
 max_new_tokens: 16
 do_sample: false
+num_beams: 1
+use_cache: true
+batch_size: 1
+max_input_tokens: 2048
+quantization:
+  load_in_4bit: true
+  bnb_4bit_quant_type: nf4
+  bnb_4bit_compute_dtype: float16
+  bnb_4bit_use_double_quant: true
 wikipedia_request_delay_seconds: 1.0
 wikipedia_max_retries: 2
 wikipedia_timeout_seconds: 3

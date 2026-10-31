@@ -113,11 +113,14 @@ def main() -> None:
     for group, queue in queues.items():
         required_group_count = target // 2 if group == "head" else target - target // 2
         accepted_group_count = 0
-        for start in range(0, len(queue), 4):
+        for start in range(0, len(queue)):
             if accepted_group_count >= required_group_count:
                 break
-            batch = [row for _, row in queue.iloc[start : start + 4].iterrows()]
-            with ThreadPoolExecutor(max_workers=4) as executor:
+            batch = [row for _, row in queue.iloc[start : start + 1].iterrows()]
+            # Wikimedia applies a shared rate limit to burst traffic.  A
+            # single in-flight request keeps this freeze reproducible and
+            # lets the configured delay act between individual requests.
+            with ThreadPoolExecutor(max_workers=1) as executor:
                 results = list(executor.map(fetch_candidate, batch))
             for row_dict, page, outcome in results:
                 if accepted_group_count >= required_group_count:

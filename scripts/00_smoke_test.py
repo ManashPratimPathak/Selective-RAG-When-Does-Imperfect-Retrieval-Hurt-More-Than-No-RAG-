@@ -6,6 +6,8 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
+from generate import GENERATION_SETTINGS, build_prompt, SYSTEM_INSTRUCTION
+
 
 MODEL_ID = "Qwen/Qwen2.5-1.5B-Instruct"
 OUTPUT_PATH = Path("outputs/smoke_test.jsonl")
@@ -35,10 +37,7 @@ def load_model():
 
 def generate_answer(tokenizer, model, user_prompt: str) -> str:
     messages = [
-        {
-            "role": "system",
-            "content": "Answer the question briefly. Return only the answer, with no explanation.",
-        },
+        {"role": "system", "content": SYSTEM_INSTRUCTION},
         {"role": "user", "content": user_prompt},
     ]
     inputs = tokenizer.apply_chat_template(
@@ -51,8 +50,10 @@ def generate_answer(tokenizer, model, user_prompt: str) -> str:
     with torch.inference_mode():
         outputs = model.generate(
             **inputs,
-            max_new_tokens=16,
-            do_sample=False,
+            max_new_tokens=GENERATION_SETTINGS["max_new_tokens"],
+            do_sample=GENERATION_SETTINGS["do_sample"],
+            num_beams=GENERATION_SETTINGS["num_beams"],
+            use_cache=GENERATION_SETTINGS["use_cache"],
         )
     answer = tokenizer.decode(
         outputs[0][inputs["input_ids"].shape[-1] :],
@@ -67,12 +68,12 @@ def main() -> None:
         raise RuntimeError("Model did not load in 4-bit mode.")
 
     question = "What is the capital of France?"
-    no_rag_answer = generate_answer(tokenizer, model, question)
-    rag_prompt = (
-        "Evidence: Paris is the capital and largest city of France.\n\n"
-        f"Question: {question}"
+    no_rag_answer = generate_answer(tokenizer, model, build_prompt(question, "no_rag", []))
+    rag_answer = generate_answer(
+        tokenizer,
+        model,
+        build_prompt(question, "clean_rag", ["Paris is the capital and largest city of France."]),
     )
-    rag_answer = generate_answer(tokenizer, model, rag_prompt)
 
     records = [
         {"condition": "no_rag", "question": question, "answer": no_rag_answer},

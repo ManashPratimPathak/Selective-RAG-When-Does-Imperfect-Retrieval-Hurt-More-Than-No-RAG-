@@ -216,3 +216,66 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Pytest temp and sandbox directories
+.pytest-*
+.pytest_cache/
+
+# Local caches and scratch space
+.matplotlib/
+tmp/
+.codex/
+.agents/
+
+# Local project environments and editor metadata
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.vscode/
+.idea/
+
+# Test-created sandboxes and temporary files
+.pytest-*/
+*.tmp
+*.temp
+*.bak
+
+# Project data and generated artifacts.
+# The pipeline recreates these from PopQA, Wikipedia, and the pinned config.
+data/raw/**
+!data/raw/.gitkeep
+data/corpus/**
+!data/corpus/.gitkeep
+data/frozen/**
+!data/frozen/.gitkeep
+data/index/**
+!data/index/.gitkeep
+data/impurities/**
+!data/impurities/.gitkeep
+data/manifests/**
+!data/manifests/.gitkeep
+data/retrieval/**
+!data/retrieval/.gitkeep
+
+# Model/evaluation outputs are reproducible build products, not source files.
+outputs/**
+!outputs/.gitkeep
+!outputs/figures/.gitkeep
+!outputs/metrics/.gitkeep
+!outputs/predictions/.gitkeep
+!outputs/retrieval/.gitkeep
+
+# Duplicate presentation snapshot and local archives.
+presentation_phase_1_to_5/
+*.zip
+
+# Empty/local-only notebook directory; add notebooks explicitly if needed later.
+notebooks/*
+!notebooks/.gitkeep
+
+# Development-only Markdown notes and report artifacts.
+*.md
+!README.md
+report/

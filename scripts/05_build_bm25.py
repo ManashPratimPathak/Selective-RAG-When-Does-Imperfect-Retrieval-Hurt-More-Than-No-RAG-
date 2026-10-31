@@ -1,8 +1,6 @@
-"""Build and persist the BM25 retrieval index."""
+"""Build the deterministic BM25 corpus artifacts."""
 
-
-def main() -> None:
-    raise NotImplementedError
+from build_bm25 import main
 
 
 if __name__ == "__main__":
